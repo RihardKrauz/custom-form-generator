@@ -4,9 +4,14 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.3.2",
+    "notistack": "^0.8.9",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
-    "react-scripts": "3.1.0"
+    "react-redux": "^7.1.0",
+    "react-scripts": "3.1.0",
+    "react-toastify": "^5.3.2",
+    "redux": "^4.0.4",
+    "rxjs": "^6.5.2"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -15,7 +20,53 @@
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": [
+      "react-app",
+      "eslint:recommended",
+      "plugin:react/recommended"
+    ],
+    "settings": {
+      "react": {
+        "createClass": "createReactClass",
+        "pragma": "React",
+        "version": "detect",
+        "flowVersion": "0.53"
+      },
+      "propWrapperFunctions": [
+        "forbidExtraProps",
+        {
+          "property": "freeze",
+          "object": "Object"
+        },
+        {
+          "property": "myFavoriteWrapper"
+        }
+      ]
+    },
+    "rules": {
+      "no-console": 0,
+      "prefer-destructuring": 2,
+      "no-param-reassign": 1,
+      "prefer-spread": 1,
+      "import/no-mutable-exports": 2,
+      "no-restricted-globals": 2,
+      "react/no-deprecated": 2,
+      "react/jsx-uses-react": "error",
+      "react/jsx-uses-vars": "error",
+      "react/prop-types": [
+        1,
+        {
+          "ignore": [
+            "dispatch"
+          ]
+        }
+      ]
+    },
+    "parserOptions": {
+      "ecmaFeatures": {
+        "jsx": true
+      }
+    }
   },
   "browserslist": {
     "production": [
