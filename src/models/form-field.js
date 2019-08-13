@@ -1,8 +1,8 @@
 import FormFieldType from './form-field-type';
 
 export default class FormField {
-    fieldType: FormFieldType;
-    values: string[];
+    // fieldType: FormFieldType;
+    // values: string[];
 
     constructor() {
         this.fieldType = FormFieldType.TextField;

@@ -14,14 +14,14 @@ const TabPanel = (props) => {
 
     return (
         <Typography
-        component="div"
-        role="tabpanel"
-        hidden={value !== index}
-        id={`full-width-tabpanel-${index}`}
-        aria-labelledby={`full-width-tab-${index}`}
-        {...other}
+            component="div"
+            role="tabpanel"
+            hidden={value !== index}
+            id={`full-width-tabpanel-${index}`}
+            aria-labelledby={`full-width-tab-${index}`}
+            {...other}
         >
-        <Box p={3}>{children}</Box>
+            <Box p={3}>{children}</Box>
         </Typography>
     );
 }
@@ -32,20 +32,20 @@ TabPanel.propTypes = {
     value: PropTypes.any.isRequired,
 };
 
-const TabBar = ({value, onChangeTab}) => {
+const TabBar = ({ value, onChangeTab }) => {
     return (<AppBar position="static" color="default">
-                <Tabs
-                    value={value}
-                    onChange={onChangeTab}
-                    indicatorColor="primary"
-                    textColor="primary"
-                    variant="fullWidth"
-                    aria-label="constructor-panel"
-                    >
-                    <Tab label="Item One"  />
-                    <Tab label="Item Two"  />
-                </Tabs>
-            </AppBar>)
+        <Tabs
+            value={value}
+            onChange={onChangeTab}
+            indicatorColor="primary"
+            textColor="primary"
+            variant="fullWidth"
+            aria-label="constructor-panel"
+        >
+            <Tab label="Item One" />
+            <Tab label="Item Two" />
+        </Tabs>
+    </AppBar>)
 }
 
 TabBar.propTypes = {
@@ -62,7 +62,7 @@ export default function ConstructorPanel() {
 
     return (
         <div className="constructor-panel">
-        <TabBar value={tabIndex} onChangeTab={changeTab} />
+            <TabBar value={tabIndex} onChangeTab={changeTab} />
             <TabPanel value={tabIndex} index={0}>
                 <ConfigPanel />
             </TabPanel>

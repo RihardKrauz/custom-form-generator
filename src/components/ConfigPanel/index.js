@@ -3,6 +3,9 @@ import { connect } from 'react-redux';
 import { getFormData } from '../../store/selectors';
 import { setJsonConfigData, validateAndParseJsonConfigData, notifyConfigValidity } from '../../store/actions';
 
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
@@ -13,12 +16,12 @@ class ConfigPanel extends Component {
         super(props);
 
         this.state = {
-            data: '',
+            formConfigValue: '',
             input$: new Subject(),
             inputChangeSubscription: null
         };
 
-        this.setData = this.setData.bind(this);
+        this.setFormConfigValue = this.setFormConfigValue.bind(this);
     }
 
     componentDidMount() {
@@ -29,7 +32,7 @@ class ConfigPanel extends Component {
                     distinctUntilChanged()
                 )
                 .subscribe(val => {
-                    this.props.dispatch(setJsonConfigData(this.state.data));
+                    this.props.dispatch(setJsonConfigData(this.state.formConfigValue));
                 })
         });
     }
@@ -40,29 +43,33 @@ class ConfigPanel extends Component {
         }
     }
 
-    setData(val) {
-        this.setState({ data: val });
-        this.state.input$.next(val);
+    setFormConfigValue(value) {
+        this.setState({ formConfigValue: value });
+        this.state.input$.next(value);
     }
 
     render() {
         return (
-            <div>
-                <textarea
-                    value={this.state.data}
+            <div className="config-panel">
+                <TextField
+                    label="Form configuration"
+                    multiline
+                    rowsMax="15"
+                    value={this.state.formConfigValue}
                     onChange={e => {
-                        this.setData(e.target.value);
+                        this.setFormConfigValue(e.target.value);
                     }}
+                    className="config-panel__form-field"
+                    margin="normal"
                 />
-                <button
+                <Button variant="contained" color="primary" className="config-panel__action"
                     onClick={() => {
-                        this.props.dispatch(validateAndParseJsonConfigData(this.state.data));
+                        this.props.dispatch(validateAndParseJsonConfigData(this.state.formConfigValue));
                         this.props.dispatch(notifyConfigValidity());
                     }}
                 >
-                    test
-                </button>{' '}
-                Config panel{' '}
+                    Apply
+                </Button>
             </div>
         );
     }
