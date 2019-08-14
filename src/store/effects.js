@@ -1,13 +1,15 @@
 import { NOTIFY_CONFIG_VALIDITY } from './actions';
 import Notifier from '../components/Notifier';
-import { isParsedJsonValid } from './selectors';
+import { isParsedJsonValid, getConfigError } from './selectors';
 
 const notifyUserParseResult = store => next => action => {
     if (action.type === NOTIFY_CONFIG_VALIDITY) {
-        if (isParsedJsonValid(store.getState()) === true) {
-            Notifier.notifySuccess('JSON config has been successfully parsed');
+        const state = store.getState();
+        if (isParsedJsonValid(state) === true) {
+            Notifier.notifySuccess('Form has been successfully created');
         } else {
-            Notifier.notifyError('Error on parsing JSON config');
+            const errorMessage = getConfigError(state);
+            Notifier.notifyError(`Error on parsing config: ${errorMessage}`);
         }
     }
 

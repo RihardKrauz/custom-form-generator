@@ -6,7 +6,7 @@ export default class FormData {
     //actions: FormAction[];
 
     constructor() {
-        this.title = '';
+        this.title = 'Default form';
         this.fields = [];
         this.actions = [];
     }

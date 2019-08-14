@@ -1,13 +1,24 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getFormData } from '../../store/selectors';
+import { getInvalidCharPos } from '../../store/selectors';
 import { setJsonConfigData, validateAndParseJsonConfigData, notifyConfigValidity } from '../../store/actions';
+import DEFAULT_CONFIG from './default-config';
 
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import styled from 'styled-components';
 
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+
+const ConfigPanelContainer = styled.div`
+    overflow: hidden;
+`;
+
+const WideTextField = styled(TextField)`
+    width: 100%;
+`;
 
 const DEBOUNCE_TIME = 500;
 
@@ -22,6 +33,7 @@ class ConfigPanel extends Component {
         };
 
         this.setFormConfigValue = this.setFormConfigValue.bind(this);
+        this.onApplyButtonClickAction = this.onApplyButtonClickAction.bind(this);
     }
 
     componentDidMount() {
@@ -35,6 +47,8 @@ class ConfigPanel extends Component {
                     this.props.dispatch(setJsonConfigData(this.state.formConfigValue));
                 })
         });
+
+        this.setFormConfigValue(DEFAULT_CONFIG);
     }
 
     componentWillUnmount() {
@@ -44,40 +58,45 @@ class ConfigPanel extends Component {
     }
 
     setFormConfigValue(value) {
-        this.setState({ formConfigValue: value });
-        this.state.input$.next(value);
+        this.setState({ formConfigValue: value }, () => {
+            this.state.input$.next(value);
+        });
+    }
+
+    onApplyButtonClickAction() {
+        this.props.dispatch(validateAndParseJsonConfigData(this.state.formConfigValue));
+        this.props.dispatch(notifyConfigValidity());
     }
 
     render() {
         return (
-            <div className="config-panel">
-                <TextField
+            <ConfigPanelContainer>
+                <WideTextField
                     label="Form configuration"
                     multiline
+                    size="small"
                     rowsMax="15"
                     value={this.state.formConfigValue}
                     onChange={e => {
                         this.setFormConfigValue(e.target.value);
                     }}
-                    className="config-panel__form-field"
                     margin="normal"
                 />
-                <Button variant="contained" color="primary" className="config-panel__action"
-                    onClick={() => {
-                        this.props.dispatch(validateAndParseJsonConfigData(this.state.formConfigValue));
-                        this.props.dispatch(notifyConfigValidity());
-                    }}
-                >
+                <Button variant="contained" color="primary" onClick={this.onApplyButtonClickAction}>
                     Apply
                 </Button>
-            </div>
+            </ConfigPanelContainer>
         );
     }
 }
 
+ConfigPanel.propTypes = {
+    invalidCharPos: PropTypes.number
+};
+
 const mapStateToProps = state => {
     return {
-        formData: getFormData(state)
+        invalidCharPos: getInvalidCharPos(state)
     };
 };
 
